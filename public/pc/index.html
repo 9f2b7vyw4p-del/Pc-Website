@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Personal PC control panel">
+    <title>PC — Osayona</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <main class="container">
+
+        <header class="topbar">
+            <a href="/" class="brand">OSAYONA</a>
+
+            <nav>
+                <a href="/notes">Notes</a>
+                <a href="/cv">CV</a>
+                <a href="/pc" class="active">PC</a>
+            </nav>
+        </header>
+
+        <section class="hero">
+            <p class="eyebrow">PERSONAL COMPUTING</p>
+            <h1>PC Control</h1>
+            <p class="subtitle">
+                Remote access to the Windows PC at home.
+            </p>
+        </section>
+
+        <section class="pc-card">
+
+            <div class="card-header">
+                <div>
+                    <p class="label">WINDOWS PC</p>
+                    <h2>Js-PC</h2>
+                </div>
+
+                <div class="status">
+                    <span class="status-dot"></span>
+                    <span id="status-text">Sleeping</span>
+                </div>
+            </div>
+
+            <div class="specs">
+                <div class="spec">
+                    <span>CPU</span>
+                    <strong>Ryzen 9 9950X3D</strong>
+                </div>
+
+                <div class="spec">
+                    <span>GPU</span>
+                    <strong>RTX 5070 Ti</strong>
+                </div>
+
+                <div class="spec">
+                    <span>OS</span>
+                    <strong>Windows 11 Pro</strong>
+                </div>
+            </div>
+
+            <div class="actions">
+                <button id="wake-button" class="primary">
+                    Wake PC
+                </button>
+
+                <button id="connect-button" class="secondary" disabled>
+                    Connect
+                </button>
+            </div>
+
+            <p id="message" class="message"></p>
+
+        </section>
+
+        <footer>
+            <span>OSAYONA.COM</span>
+            <span>PC CONTROL</span>
+        </footer>
+
+    </main>
+
+    <script src="app.js"></script>
+</body>
+</html>

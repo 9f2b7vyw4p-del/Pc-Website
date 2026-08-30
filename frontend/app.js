@@ -4,17 +4,98 @@ const statusText = document.getElementById("status-text");
 const statusDot = document.querySelector(".status-dot");
 const message = document.getElementById("message");
 
-wakeButton.addEventListener("click", () => {
+const API_URL = "http://127.0.0.1:8787";
+
+let statusTimer = null;
+
+
+function setStatus(status) {
+    const labels = {
+        sleeping: "Sleeping",
+        waking: "Waking",
+        online: "Online",
+        offline: "Offline"
+    };
+
+    statusText.textContent = labels[status] || status;
+
+    statusDot.className = "status-dot";
+
+    if (status === "online") {
+        statusDot.classList.add("online");
+    }
+
+    if (status === "waking") {
+        statusDot.classList.add("waking");
+    }
+
+    wakeButton.disabled = status === "waking" || status === "online";
+    connectButton.disabled = status !== "online";
+
+    wakeButton.textContent =
+        status === "waking" ? "Waking…" :
+        status === "online" ? "PC Online" :
+        "Wake PC";
+}
+
+
+async function getStatus() {
+    try {
+        const response = await fetch(`${API_URL}/api/pc/status`);
+
+        if (!response.ok) {
+            throw new Error("Status request failed");
+        }
+
+        const data = await response.json();
+
+        setStatus(data.status);
+
+        if (data.status === "online") {
+            clearInterval(statusTimer);
+            message.textContent = "PC is ready.";
+        }
+
+    } catch (error) {
+        setStatus("offline");
+        message.textContent = "Unable to reach PC control service.";
+    }
+}
+
+
+async function wakePC() {
     wakeButton.disabled = true;
-    wakeButton.textContent = "Waking…";
+    message.textContent = "Sending wake request…";
 
-    statusText.textContent = "Waking";
-    message.textContent = "Wake-on-LAN request will be sent once the backend is connected.";
+    try {
+        const response = await fetch(`${API_URL}/api/pc/wake`, {
+            method: "POST"
+        });
 
-    // Temporary UI simulation.
-    // This will be replaced by the Mac mini agent API.
-    setTimeout(() => {
-        wakeButton.disabled = false;
-        wakeButton.textContent = "Wake PC";
-    }, 2500);
+        if (!response.ok) {
+            throw new Error("Wake request failed");
+        }
+
+        const data = await response.json();
+
+        setStatus(data.status);
+        message.textContent = "PC is waking…";
+
+        clearInterval(statusTimer);
+        statusTimer = setInterval(getStatus, 1000);
+
+    } catch (error) {
+        setStatus("offline");
+        message.textContent = "Unable to send wake request.";
+    }
+}
+
+
+wakeButton.addEventListener("click", wakePC);
+
+connectButton.addEventListener("click", () => {
+    message.textContent = "Remote connection integration coming next.";
 });
+
+
+getStatus();

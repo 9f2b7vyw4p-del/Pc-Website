@@ -242,3 +242,21 @@ footer {
         width: 100%;
     }
 }
+
+.status-dot.online {
+    background: var(--success);
+}
+
+.status-dot.waking {
+    animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.25;
+    }
+}

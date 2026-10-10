@@ -94,7 +94,7 @@ async function wakePC() {
 wakeButton.addEventListener("click", wakePC);
 
 connectButton.addEventListener("click", () => {
-    message.textContent = "Remote connection integration coming next.";
+    window.open("https://remotedesktop.google.com/access/", "_blank");
 });
 
 
